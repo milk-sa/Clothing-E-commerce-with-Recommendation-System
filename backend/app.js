@@ -1,10 +1,11 @@
 const db = require("./src/config/db");
 const express = require("express");
 
+const cron = require("node-cron");
+const checkPriceAlerts = require("./src/jobs/checkPriceAlerts");
 
 
-
-const Product = require('./src/models/Product');
+const Product = require('./src/models/product');
 
 
 
@@ -32,6 +33,13 @@ app.use("/api/alerts", priceAlertRoutes);
 
 app.get("/", (req, res) => {
   res.send("E-commerce API is running...");
+});
+
+
+// run every 5 minutes
+cron.schedule("*/1 * * * *", () => {
+  console.log("Checking price alerts...");
+  checkPriceAlerts();
 });
 
 module.exports = app;
