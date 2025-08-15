@@ -1,8 +1,9 @@
 const db = require("../config/db");
+const auth = require("../middleware/auth");
 
 const setPriceAlert = async (req, res) => {
   const { product_id, desired_percent } = req.body;
-  const user_id = req.user?.id || 1; // temporary user id for testing if no auth
+  const user_id = req.user.id; // from middleware
 
   if (!product_id || !desired_percent) {
     return res.status(400).json({ message: "Please provide product_id and desired_percent" });
